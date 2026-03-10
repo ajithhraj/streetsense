@@ -52,9 +52,14 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     st.divider()
 
-    api_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...",
-                            help="Get a free key at console.groq.com")
-    st.markdown("<p style='color:#48484a;font-size:11px;margin-top:4px'>Free at console.groq.com</p>", unsafe_allow_html=True)
+    # Auto-load from Streamlit secrets if available
+    _secret_key = st.secrets.get("GROQ_API_KEY", "") if hasattr(st, "secrets") else ""
+    if _secret_key:
+        api_key = _secret_key
+        st.markdown("<div style='background:#1c1c1e;border:1px solid rgba(48,209,88,0.2);border-radius:8px;padding:8px 12px;font-size:12px;color:#30d158'>✓ API key configured</div>", unsafe_allow_html=True)
+    else:
+        api_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...", help="Get a free key at console.groq.com")
+        st.markdown("<p style='color:#48484a;font-size:11px;margin-top:4px'>Free at console.groq.com</p>", unsafe_allow_html=True)
     st.divider()
 
     location_name = st.text_input("Location", placeholder="e.g. Koramangala, Bengaluru")
